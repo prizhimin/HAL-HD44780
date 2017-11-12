@@ -21,7 +21,7 @@ void LCD_PrintDec(int32_t data);				// Print a decimal number
 
 void LCD_GoTo(uint8_t Row, uint8_t Col)    			// Set the cursor to the specified coordinates
 {
-    char address;
+	char address;
 	switch(Row)
 	{
 		case 0:	address = 0;
@@ -34,47 +34,45 @@ void LCD_GoTo(uint8_t Row, uint8_t Col)    			// Set the cursor to the specified
 				break;
 		default:address = 0;
 	}
-    address |= Col;						// Col - zero based col number
-    LCD_SendByte(0x80 | address, FALSE);
+	address |= Col;						// Col - zero based col number
+	LCD_SendByte(0x80 | address, FALSE);
 } // LCD_GoTo
 
 void LCD_Clear()						// Cleaning the display
 {
-    LCD_SendByte(0x01, FALSE);
-    LCD_SendByte(0x02, FALSE);
-		HAL_Delay(2);
+	LCD_SendByte(0x01, FALSE);
+	LCD_SendByte(0x02, FALSE);
+	HAL_Delay(2);
 } // LCD_Clear
 
 void LCD_Init(void)						// Initializing the display (16*2, 5*7, Display on, cursor off, blink cursor off)
 {
 
 	HAL_Delay(15);
-    LCD_Send4bits(3);
-    LCD_PulseEN();
+	LCD_Send4bits(3);
+	LCD_PulseEN();
 	HAL_Delay(5);
-    LCD_Send4bits(3);
-    LCD_PulseEN();
+	LCD_Send4bits(3);
+	LCD_PulseEN();
 	HAL_Delay(1);
-    LCD_Send4bits(3);
-    LCD_PulseEN();
+	LCD_Send4bits(3);
+	LCD_PulseEN();
 	LCD_Send4bits(2);
-    LCD_PulseEN();
-    LCD_SendByte(0x28, FALSE);
-    LCD_SendByte(0x0C, FALSE);
-    LCD_SendByte(0x06, FALSE);
+	LCD_PulseEN();
+	LCD_SendByte(0x28, FALSE);
+	LCD_SendByte(0x0C, FALSE);
+	LCD_SendByte(0x06, FALSE);
 } // LCD_Init
 
 void LCD_PrintStr(uint8_t *Text)				// Print a string
 {
-    uint8_t *c;
-
-    c = Text;
-
-    while ((c != 0) && (*c != 0))
-    {
-        LCD_SendByte(*c, TRUE);
-        c++;
-    }
+	uint8_t *c;
+	c = Text;
+	while ((c != 0) && (*c != 0))
+	{
+		LCD_SendByte(*c, TRUE);
+		c++;
+	}
 } // LCD_PrintStr
 
 void LCD_PrintDec(int32_t data){				// Print a decimal number
@@ -85,8 +83,8 @@ void LCD_PrintDec(int32_t data){				// Print a decimal number
 	int32_t tmp_data;					// Temporary variable to store the output number
 
 	tmp_data=data;
-
-	if(data<0){
+	if(data<0)
+	{
 		sign='-';
 		tmp_data=-tmp_data;
 	}
@@ -118,26 +116,26 @@ void LCD_PulseEN(void)
 
 void LCD_SendByte(uint8_t ByteToSend, uint8_t IsData)
 {
-    LCD_Send4bits(ByteToSend >> 4);
-    if (IsData == TRUE)
-    {
+	LCD_Send4bits(ByteToSend >> 4);
+	if (IsData == TRUE)
+	{
 		HAL_GPIO_WritePin(PORT_LCD, LCD_PIN_RS, GPIO_PIN_SET);
-    }
-    else
-    {
+	}
+	else
+	{
 		HAL_GPIO_WritePin(PORT_LCD, LCD_PIN_RS, GPIO_PIN_RESET);
-    }
-    LCD_PulseEN();
-    LCD_Send4bits(ByteToSend);
-    if (IsData == TRUE)
-    {
+	}
+	LCD_PulseEN();
+	LCD_Send4bits(ByteToSend);
+	if (IsData == TRUE)
+	{
 		HAL_GPIO_WritePin(PORT_LCD, LCD_PIN_RS, GPIO_PIN_SET);
-    }
-    else
-    {
+	}
+	else
+	{
 		HAL_GPIO_WritePin(PORT_LCD, LCD_PIN_RS, GPIO_PIN_RESET);
-    }
-    LCD_PulseEN();
+	}
+	LCD_PulseEN();
 } // LCD_SendByte
 
 void LCD_Send4bits(uint8_t value) {
