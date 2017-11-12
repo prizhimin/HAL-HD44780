@@ -3,8 +3,8 @@
 
 #include "stm32f1xx_hal.h"
 
-#define TRUE				1
-#define FALSE				0
+#define TRUE			1
+#define FALSE			0
 
 #define	PORT_LCD		GPIOB
 #define	LCD_PIN_D4		GPIO_PIN_12
