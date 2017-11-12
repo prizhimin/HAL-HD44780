@@ -5,7 +5,7 @@
 
 #include "lcd.h"
 
-#define LENLONG 12												// максимальное количество (включая знак -) десятичных цифр в переменной типа long
+#define LENLONG 12						// The maximum number (including minus) of decimal digits in a variable of type int32_t
 
 
 void LCD_PulseEN(void);
@@ -13,13 +13,13 @@ void LCD_SendByte(uint8_t, uint8_t);
 void LCD_Send4bits(uint8_t);
 
 
-void LCD_Init(void);											// Инициализация дисплея
-void LCD_Clear(void);											// Очистка экрана дисплея
-void LCD_GoTo(uint8_t Row, uint8_t Col);						// Установка курсора в заданные координаты
-void LCD_PrintStr(uint8_t *Text);								// Печать строки
-void LCD_PrintDec(int32_t data);								// Печать десятичного числа
+void LCD_Init(void);						// Initializing the display
+void LCD_Clear(void);						// Cleaning the display
+void LCD_GoTo(uint8_t Row, uint8_t Col);			// Set the cursor to the specified coordinates
+void LCD_PrintStr(uint8_t *Text);				// Print a string
+void LCD_PrintDec(int32_t data);				// Print a decimal number
 
-void LCD_GoTo(uint8_t Row, uint8_t Col)    						// Установка курсора в заданные координаты
+void LCD_GoTo(uint8_t Row, uint8_t Col)    			// Set the cursor to the specified coordinates
 {
     char address;
 	switch(Row)
@@ -34,18 +34,18 @@ void LCD_GoTo(uint8_t Row, uint8_t Col)    						// Установка курсора в заданные
 				break;
 		default:address = 0;
 	}
-    address |= Col;//     Col - zero based col number
+    address |= Col;						// Col - zero based col number
     LCD_SendByte(0x80 | address, FALSE);
-}
+} // LCD_GoTo
 
-void LCD_Clear()												// Очистка экрана дисплея
+void LCD_Clear()						// Cleaning the display
 {
     LCD_SendByte(0x01, FALSE);
     LCD_SendByte(0x02, FALSE);
 		HAL_Delay(2);
-}
+} // LCD_Clear
 
-void LCD_Init(void)										// Инициализация дисплея (16*2, 5*7, Display on, cursor off, blink cursor off)
+void LCD_Init(void)						// Initializing the display (16*2, 5*7, Display on, cursor off, blink cursor off)
 {
 
 	HAL_Delay(15);
@@ -62,9 +62,9 @@ void LCD_Init(void)										// Инициализация дисплея (16*2, 5*7, Display on, cu
     LCD_SendByte(0x28, FALSE);
     LCD_SendByte(0x0C, FALSE);
     LCD_SendByte(0x06, FALSE);
-}
+} // LCD_Init
 
-void LCD_PrintStr(uint8_t *Text)							// Печать строки
+void LCD_PrintStr(uint8_t *Text)				// Print a string
 {
     uint8_t *c;
 
@@ -75,14 +75,14 @@ void LCD_PrintStr(uint8_t *Text)							// Печать строки
         LCD_SendByte(*c, TRUE);
         c++;
     }
-}
+} // LCD_PrintStr
 
-void LCD_PrintDec(int32_t data){	// Печать десятичного числа
+void LCD_PrintDec(int32_t data){				// Print a decimal number
 
-	uint8_t s[LENLONG],	// Массив символов для вывода
-	sign=0,							// Флаг знака выводимого числа
-	i=LENLONG-1;				// Индекс, указывает на последний элемент массива
-	int32_t tmp_data;		// Временная переменая для хранения выводимого числа
+	uint8_t s[LENLONG],					// Array of symbols for output
+	sign=0,							// Flag of the sign of the output number
+	i=LENLONG-1;						// The index points to the last element of the array
+	int32_t tmp_data;					// Temporary variable to store the output number
 
 	tmp_data=data;
 
@@ -93,7 +93,7 @@ void LCD_PrintDec(int32_t data){	// Печать десятичного числа
 
 	do
 	{
-		s[i--]=tmp_data % 10 + '0';			// Заполняем с конца массив выводимых символов
+		s[i--]=tmp_data % 10 + '0';			// Fill in the end with an array of output characters
 		tmp_data /= 10;
 	} while (tmp_data>0);
 
@@ -102,9 +102,9 @@ void LCD_PrintDec(int32_t data){	// Печать десятичного числа
 	else
 		i++;
 	do
-		LCD_SendByte(s[i++], TRUE);			// Выводим символ на экран
+		LCD_SendByte(s[i++], TRUE);			// Display the symbol on the screen
 	while (i<LENLONG);
-}
+} // LCD_PrintDec
 
 void LCD_PulseEN(void)
 {
@@ -114,7 +114,7 @@ void LCD_PulseEN(void)
 	HAL_Delay(1);
 	HAL_GPIO_WritePin(PORT_LCD, LCD_PIN_E, GPIO_PIN_RESET);
 	HAL_Delay(1);
-}
+} // LCD_PulseEN
 
 void LCD_SendByte(uint8_t ByteToSend, uint8_t IsData)
 {
@@ -138,7 +138,7 @@ void LCD_SendByte(uint8_t ByteToSend, uint8_t IsData)
 		HAL_GPIO_WritePin(PORT_LCD, LCD_PIN_RS, GPIO_PIN_RESET);
     }
     LCD_PulseEN();
-}
+} // LCD_SendByte
 
 void LCD_Send4bits(uint8_t value) {
 	const uint16_t data_pin[4]={LCD_PIN_D4, LCD_PIN_D5, LCD_PIN_D6, LCD_PIN_D7};
@@ -150,16 +150,6 @@ void LCD_Send4bits(uint8_t value) {
 			HAL_GPIO_WritePin(PORT_LCD, data_pin[i], GPIO_PIN_SET);
 		tmp = tmp >> 1;
 	}
- }
-
-// void delay_us(uint32_t value)
-//{
-// #include "stm32f1xx_ll_tim.h" !!!
-//	LL_TIM_SetAutoReload(htim2.Instance, value - 1);
-//	LL_TIM_SetCounter(htim2.Instance,0);
-//	HAL_TIM_Base_Start(&htim2);
-//	while(LL_TIM_IsActiveFlag_UPDATE(htim2.Instance) == 0);
-//	LL_TIM_ClearFlag_UPDATE(htim2.Instance);
-//}
+ } // LCD_Send4bits
 
 #endif
