@@ -1,5 +1,5 @@
-#ifndef _LCD_HD44780
-#define _LCD_HD44780
+#ifndef _LCD_HD44780_C
+#define _LCD_HD44780_C
 
 #include "stm32f1xx_hal.h"
 
