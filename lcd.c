@@ -34,7 +34,7 @@ void LCD_GoTo(uint8_t Row, uint8_t Col)    			// Set the cursor to the specified
 				break;
 		default:address = 0;
 	}
-	address |= Col;						// Col - zero based col number
+	address += Col;						// Col - zero based col number
 	LCD_SendByte(0x80 | address, FALSE);
 } // LCD_GoTo
 
